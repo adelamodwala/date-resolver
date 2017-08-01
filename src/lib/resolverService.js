@@ -29,8 +29,8 @@ export function resolve(constraints) {
 
     // Check if the bounds are valid and non-overlapping
     if (
-        !!result.max // Max is set
-        && result.max < result.min // Max is less than the min
+        !!result.max                // Max is set
+        && result.max < result.min  // Max is less than the min
     ) {
         // The bounds are overlapping and thus results are invalid
         result.min = null;
