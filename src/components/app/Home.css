@@ -1,0 +1,10 @@
+.Home {
+    background-color: white;
+}
+
+.Home-content {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    margin-top: 50px;
+}

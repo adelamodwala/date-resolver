@@ -1,0 +1,11 @@
+.ConstraintInput {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.ConstraintInput-text {
+    font-size: 14px;
+}

@@ -4,84 +4,31 @@ import {
     Route,
     Link
 } from 'react-router-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import 'typeface-roboto';
-import Button from 'material-ui/Button';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
+import Home from './Home';
 import './App.css';
 
-const Home = () => (
-    <div>
-        <h2>Home</h2>
-    </div>
-);
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
-const About = () => (
-    <div>
-        <h2>About</h2>
-    </div>
-);
-
-const Topic = ({match}) => (
-    <div>
-        <h3>{match.params.topicId}</h3>
-    </div>
-);
-
-const Topics = ({match}) => (
-    <div>
-        <h2>Topics</h2>
-        <ul>
-            <li>
-                <Link to={`${match.url}/rendering`}>
-                    Rendering with React
-                </Link>
-            </li>
-            <li>
-                <Link to={`${match.url}/components`}>
-                    Components
-                </Link>
-            </li>
-            <li>
-                <Link to={`${match.url}/props-v-state`}>
-                    Props v. State
-                </Link>
-            </li>
-        </ul>
-
-        <Route path={`${match.url}/:topicId`} component={Topic}/>
-        <Route exact path={match.url} render={() => (
-            <h3>Please select a topic.</h3>
-        )}/>
-    </div>
-);
-
-const BasicExample = () => (
+const AppRouter = ({match}) => (
     <Router>
-        <div>
-            <ul>
-                <Button>
-                    <Link to="/" style={{textDecoration: 'none'}}>Home</Link>
-                </Button>
-                <Button><Link to="/about">About</Link></Button>
-                <Button><Link to="/topics">Topics</Link></Button>
-            </ul>
-
-            <hr/>
-
-            <Route exact path="/" component={Home}/>
-            <Route path="/about" component={About}/>
-            <Route path="/topics" component={Topics}/>
-        </div>
+        <Route exact path="/" component={Home}/>
     </Router>
 );
-
 
 class App extends Component {
     render() {
         return (
-            <div className="App">
-                <BasicExample/>
-            </div>
+            <MuiThemeProvider>
+                <div className="App">
+                    <AppRouter/>
+                </div>
+            </MuiThemeProvider>
         );
     }
 }
