@@ -1,8 +1,8 @@
 import {constraintsActionTypes} from "../../lib/actionKeys";
 
-export function setConstraintInputBoundary(boundary) {
+export function addConstraint(constraint) {
     return {
-        type: constraintsActionTypes.SET_CONSTRAINT_INPUT_BOUNDARY,
-        boundary
+        type: constraintsActionTypes.ADD_CONSTRAINT,
+        constraint
     }
 }

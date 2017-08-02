@@ -1,23 +1,22 @@
 import {constraintsActionTypes} from "../../lib/actionKeys";
 import {CONSTRAINT} from '../../lib/constants';
+import * as resolverService from '../../lib/resolverService';
 
 const initialState = {
-    currentInput: {
-        boundary: CONSTRAINT.GREATER_THAN
-    }
+    constraints: [],
+    resultSet: {}
 };
 
 export default function constraintsReducer(state = initialState, action) {
     switch (action.type) {
 
-        case constraintsActionTypes.SET_CONSTRAINT_INPUT_BOUNDARY:
-            let currentInput = {
-                ...state.currentInput,
-                boundary: action.boundary
-            };
+        case constraintsActionTypes.ADD_CONSTRAINT:
+            let constraints = [...state.constraints, action.constraint];
+            let resultSet = resolverService.resolve(constraints);
             return {
                 ...state,
-                currentInput
+                constraints,
+                resultSet
             };
 
         default:

@@ -4,6 +4,11 @@ import * as Constants from './constants';
 const tomorrow = (dateUtils.getDateDaysAgo(new Date(), -1)).getTime();
 const CONSTRAINT = Constants.CONSTRAINT;
 
+/**
+ * Perform a resolution of the given set of constraints
+ * @param constraints
+ * @returns {{min: number, max: null, resolved: boolean}}
+ */
 export function resolve(constraints) {
     const result = {
         min: tomorrow,
@@ -37,10 +42,10 @@ export function resolve(constraints) {
     }
     else {
         // The bounds are valid and non-overlapping. Continue to resolve.
-        constraints.map((item, i) => {
-            console.log(item.type, new Date(item.value), i);
-
-        });
+        // constraints.map((item, i) => {
+        //     console.log(item.type, new Date(item.value), i);
+        //
+        // });
     }
 
     return result;

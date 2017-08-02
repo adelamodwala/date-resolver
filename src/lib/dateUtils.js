@@ -116,3 +116,11 @@ export function isToday(date) {
     let givenDate = moment(date);
     return moment().startOf('day').isBefore(givenDate) && moment().endOf('day').isAfter(givenDate);
 }
+
+/**
+ * Return true if given object is a valid Date object
+ * @param obj
+ */
+export function isValidDate(obj) {
+    return moment(obj).isValid();
+}

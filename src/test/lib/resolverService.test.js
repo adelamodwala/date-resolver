@@ -152,4 +152,28 @@ describe('resolverService tests', () => {
         });
     });
 
+    it('resolve when conflicting but non-overlapping minimum and maximum bounds then resolved', () => {
+
+        const constraints = [{
+            "type": Constants.CONSTRAINT.GREATER_THAN,
+            "value": 1501732800000
+        }, {
+            "type": Constants.CONSTRAINT.GREATER_THAN,
+            "value": 1501905600000
+        }, {
+            "type": Constants.CONSTRAINT.LESS_THAN,
+            "value": 1502732800000
+        }, {
+            "type": Constants.CONSTRAINT.LESS_THAN,
+            "value": 1502942400000
+        }];
+
+        let result = resolverService.resolve(constraints);
+        expect(result).toEqual({
+            min: 1501905600000,
+            max: 1502732800000,
+            resolved: true
+        });
+    })
+
 });

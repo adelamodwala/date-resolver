@@ -9,6 +9,7 @@ import './ConstraintInput.css';
 import SelectList from '../common/SelectList';
 import DatePicker from "../common/DatePicker";
 import * as dateUtils from "../../lib/dateUtils";
+import AddActionButton from "../common/AddActionButton";
 
 const tomorrow = dateUtils.getDateDaysAgo(new Date(), -1);
 
@@ -17,25 +18,40 @@ class ConstraintInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            defaultDate: tomorrow
+            date: tomorrow,
+            constraint: Constants.CONSTRAINT.GREATER_THAN,
+            disableAdd: false
         }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        let defaultDate = null;
-        if(nextProps.currentInput.boundary === Constants.CONSTRAINT.GREATER_THAN) {
-            defaultDate = tomorrow;
-        }
-        this.setState({defaultDate});
     }
 
     onConstraintSelect(option) {
         console.log(option);
-        this.props.actions.setConstraintInputBoundary(option.type);
+        let date = null;
+        if(option.type === Constants.CONSTRAINT.GREATER_THAN) {
+            date = tomorrow;
+        }
+        this.setState({constraint: option.type, date}, this.validateConstraint.bind(this));
     }
 
     onDateSelect(date) {
         console.log(date);
+        this.setState({date}, this.validateConstraint.bind(this));
+    }
+
+    validateConstraint() {
+        let disableAdd = true;
+        if(dateUtils.isValidDate(this.state.date) && !!this.state.constraint) {
+            disableAdd = false;
+        }
+        this.setState({disableAdd});
+    }
+
+    onAddConstraint() {
+        let constraint = {
+            type: this.state.constraint,
+            value: this.state.date.getTime()
+        };
+        this.props.actions.addConstraint(constraint);
     }
 
     render() {
@@ -44,15 +60,19 @@ class ConstraintInput extends Component {
                 <div className="ConstraintInput-text">The day must</div>
                 <SelectList onItemSelect={option => this.onConstraintSelect(option)}
                             options={[{
-                                label: 'Be After',
+                                label: Constants.CONSTRAINT_LABEL.GREATER_THAN,
                                 type: Constants.CONSTRAINT.GREATER_THAN
                             }, {
-                                label: 'Be Before',
+                                label: Constants.CONSTRAINT_LABEL.LESS_THAN,
                                 type: Constants.CONSTRAINT.LESS_THAN
                             }]}/>
-                <DatePicker value={this.state.defaultDate}
+                <DatePicker value={this.state.date}
                             minDate={tomorrow}
                             onDateSelect={date => this.onDateSelect(date)}/>
+                <AddActionButton action={() => this.onAddConstraint()}
+                                 mini={true}
+                                 disabled={this.state.disableAdd}
+                                 backgroundColor={"rgba(0,0,0,0.5)"}/>
             </div>
         );
     }
@@ -60,20 +80,13 @@ class ConstraintInput extends Component {
 
 ConstraintInput.propTypes = {};
 
-const mapStateToProps = (state) => {
-    const {currentInput} = state.constraints;
-    return {
-        currentInput
-    };
-};
-
 function mapDispatchToProps(dispatch) {
-    let {setConstraintInputBoundary} = constraintActions;
-    const dispatchActions = bindActionCreators({setConstraintInputBoundary}, dispatch);
+    let {addConstraint} = constraintActions;
+    const dispatchActions = bindActionCreators({addConstraint}, dispatch);
     return {
         dispatch,
         actions: dispatchActions
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConstraintInput);
+export default connect(null, mapDispatchToProps)(ConstraintInput);
