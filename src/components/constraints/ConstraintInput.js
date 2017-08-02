@@ -10,6 +10,7 @@ import SelectList from '../common/SelectList';
 import DatePicker from "../common/DatePicker";
 import * as dateUtils from "../../lib/dateUtils";
 import AddActionButton from "../common/AddActionButton";
+import ToolButton from "../common/ToolButton";
 
 const tomorrow = dateUtils.getDateDaysAgo(new Date(), -1);
 
@@ -27,7 +28,7 @@ class ConstraintInput extends Component {
     onConstraintSelect(option) {
         console.log(option);
         let date = null;
-        if(option.type === Constants.CONSTRAINT.GREATER_THAN) {
+        if (option.type === Constants.CONSTRAINT.GREATER_THAN) {
             date = tomorrow;
         }
         this.setState({constraint: option.type, date}, this.validateConstraint.bind(this));
@@ -40,7 +41,7 @@ class ConstraintInput extends Component {
 
     validateConstraint() {
         let disableAdd = true;
-        if(dateUtils.isValidDate(this.state.date) && !!this.state.constraint) {
+        if (dateUtils.isValidDate(this.state.date) && !!this.state.constraint) {
             disableAdd = false;
         }
         this.setState({disableAdd});
@@ -69,10 +70,9 @@ class ConstraintInput extends Component {
                 <DatePicker value={this.state.date}
                             minDate={tomorrow}
                             onDateSelect={date => this.onDateSelect(date)}/>
-                <AddActionButton action={() => this.onAddConstraint()}
-                                 mini={true}
-                                 disabled={this.state.disableAdd}
-                                 backgroundColor={"rgba(0,0,0,0.5)"}/>
+                <ToolButton label="ADD"
+                            action={() => this.onAddConstraint()}
+                            backgroundColor={'rgba(0,0,0,0.1)'}/>
             </div>
         );
     }
