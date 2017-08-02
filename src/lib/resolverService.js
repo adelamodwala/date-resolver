@@ -1,10 +1,8 @@
 import * as dateUtils from '../lib/dateUtils';
+import * as Constants from './constants';
 
 const tomorrow = (dateUtils.getDateDaysAgo(new Date(), -1)).getTime();
-export const CONSTRAINT = {
-    LESS_THAN: "LESS_THAN",
-    GREATER_THAN: "GREATER_THAN"
-};
+const CONSTRAINT = Constants.CONSTRAINT;
 
 export function resolve(constraints) {
     const result = {

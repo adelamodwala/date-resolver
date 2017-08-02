@@ -8,13 +8,20 @@ class DatePicker extends Component {
             <div>
                 <DatePickerMaterial hintText="Date"
                                     container="inline"
-                                    defaultDate={this.props.defaultDate}/>
+                                    minDate={this.props.minDate}
+                                    autoOk={true}
+                                    defaultDate={this.props.defaultDate}
+                                    value={this.props.value}
+                                    onChange={(event, date) => this.props.onDateSelect(date)}/>
             </div>
         );
     }
 }
 DatePicker.propTypes = {
-    defaultDate: PropTypes.object
+    value: PropTypes.object,
+    defaultDate: PropTypes.object,
+    minDate: PropTypes.object,
+    onDateSelect: PropTypes.func
 };
 
 export default DatePicker;

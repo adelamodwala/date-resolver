@@ -1,0 +1,5 @@
+
+export const CONSTRAINT = {
+    LESS_THAN: "LESS_THAN",
+    GREATER_THAN: "GREATER_THAN"
+};

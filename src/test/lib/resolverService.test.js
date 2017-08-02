@@ -1,12 +1,13 @@
-import * as resolveService from '../../lib/resolverService';
+import * as resolverService from '../../lib/resolverService';
 import * as dateUtils from '../../lib/dateUtils';
+import * as Constants from '../../lib/constants';
 
 describe('resolverService tests', () => {
 
     const tomorrow = dateUtils.getDateDaysAgo(new Date(), -1);
 
     it('resolve when no minimum or maximum bounds given', () => {
-        let result = resolveService.resolve([]);
+        let result = resolverService.resolve([]);
         expect(result).toEqual({
             min: tomorrow.getTime(),
             max: null,
@@ -19,12 +20,12 @@ describe('resolverService tests', () => {
 
         const constraints = [
             {
-                type: resolveService.CONSTRAINT.LESS_THAN,
+                type: Constants.CONSTRAINT.LESS_THAN,
                 value: beforeTime
             }
         ];
 
-        let result = resolveService.resolve(constraints);
+        let result = resolverService.resolve(constraints);
         expect(result).toEqual({
             min: tomorrow.getTime(),
             max: beforeTime,
@@ -38,15 +39,15 @@ describe('resolverService tests', () => {
 
         const constraints = [
             {
-                type: resolveService.CONSTRAINT.LESS_THAN,
+                type: Constants.CONSTRAINT.LESS_THAN,
                 value: beforeTime1
             }, {
-                type: resolveService.CONSTRAINT.LESS_THAN,
+                type: Constants.CONSTRAINT.LESS_THAN,
                 value: beforeTime2
             }
         ];
 
-        let result = resolveService.resolve(constraints);
+        let result = resolverService.resolve(constraints);
         expect(result).toEqual({
             min: tomorrow.getTime(),
             max: beforeTime2,
@@ -59,12 +60,12 @@ describe('resolverService tests', () => {
 
         const constraints = [
             {
-                type: resolveService.CONSTRAINT.GREATER_THAN,
+                type: Constants.CONSTRAINT.GREATER_THAN,
                 value: afterTime
             }
         ];
 
-        let result = resolveService.resolve(constraints);
+        let result = resolverService.resolve(constraints);
         expect(result).toEqual({
             min: afterTime,
             max: null,
@@ -78,15 +79,15 @@ describe('resolverService tests', () => {
 
         const constraints = [
             {
-                type: resolveService.CONSTRAINT.GREATER_THAN,
+                type: Constants.CONSTRAINT.GREATER_THAN,
                 value: afterTime1
             }, {
-                type: resolveService.CONSTRAINT.GREATER_THAN,
+                type: Constants.CONSTRAINT.GREATER_THAN,
                 value: afterTime2
             }
         ];
 
-        let result = resolveService.resolve(constraints);
+        let result = resolverService.resolve(constraints);
         expect(result).toEqual({
             min: afterTime1,
             max: null,
@@ -107,21 +108,21 @@ describe('resolverService tests', () => {
 
         const constraints = [
             {
-                type: resolveService.CONSTRAINT.GREATER_THAN,
+                type: Constants.CONSTRAINT.GREATER_THAN,
                 value: afterTime1
             }, {
-                type: resolveService.CONSTRAINT.LESS_THAN,
+                type: Constants.CONSTRAINT.LESS_THAN,
                 value: beforeTime1
             }, {
-                type: resolveService.CONSTRAINT.GREATER_THAN,
+                type: Constants.CONSTRAINT.GREATER_THAN,
                 value: afterTime2
             }, {
-                type: resolveService.CONSTRAINT.LESS_THAN,
+                type: Constants.CONSTRAINT.LESS_THAN,
                 value: beforeTime2
             }
         ];
 
-        let result = resolveService.resolve(constraints);
+        let result = resolverService.resolve(constraints);
         expect(result).toEqual({
             min: afterTime2,
             max: beforeTime1,
@@ -135,15 +136,15 @@ describe('resolverService tests', () => {
 
         const constraints = [
             {
-                type: resolveService.CONSTRAINT.GREATER_THAN,
+                type: Constants.CONSTRAINT.GREATER_THAN,
                 value: afterTime
             }, {
-                type: resolveService.CONSTRAINT.LESS_THAN,
+                type: Constants.CONSTRAINT.LESS_THAN,
                 value: beforeTime
             }
         ];
 
-        let result = resolveService.resolve(constraints);
+        let result = resolverService.resolve(constraints);
         expect(result).toEqual({
             min: null,
             max: null,
