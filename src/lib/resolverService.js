@@ -5,36 +5,78 @@ const tomorrow = (dateUtils.getDateDaysAgo(new Date(), -1)).getTime();
 const CONSTRAINT = Constants.CONSTRAINT;
 
 /**
- * Perform a resolution of the given set of constraints
- * @param constraints
- * @returns {{min: number, max: null, resolved: boolean}}
+ * Find the lower bound for result
+ * @param {Array} constraints 
+ * @param {Object} result 
  */
-export function resolve(constraints) {
-    const result = {
-        min: tomorrow,
-        max: null,
-        resolved: true
-    };
-
-    // Find the lower bound
+function findLowerBound(constraints, result) {
     const greaterThans = constraints.filter(item => item.type === CONSTRAINT.GREATER_THAN);
     if (greaterThans.length > 0) {
         // Get the largest value for the upper bound
         result.min = Math.max.apply(0, greaterThans.map(x => x.value));
     }
 
-    // Find an upper bound
+    return result;
+}
+
+/**
+ * Find the upper bound for the result
+ * @param {Array} constraints 
+ * @param {Object} result 
+ */
+function findUpperBound(constraints, result) {
     const lessThans = constraints.filter(item => item.type === CONSTRAINT.LESS_THAN);
     if (lessThans.length > 0) {
         // Get the smallest value for the upper bound
         result.max = Math.min.apply(0, lessThans.map(x => x.value));
     }
 
+    return result;
+}
+
+/**
+ * Return true of the bounds set are valid
+ */
+function validateBounds(result) {
+    return !result.max                  // Max is not set
+        || result.max > result.min;     // Max is greater than the min
+}
+
+/**
+ * Set blocked dates from given constraints
+ * @param {Array} constraints 
+ * @param {Object} result 
+ */
+function blockDates(constraints, result) {
+    const blocked = constraints.filter(item => item.type === CONSTRAINT.NOT_EQUAL);
+    if (blocked.length > 0) {
+        // Set all the blocked dates
+        result.blocked = blocked.map(x => x.value);
+    }
+
+    return result;
+}
+
+/**
+ * Perform a resolution of the given set of constraints
+ * @param constraints
+ * @returns {{min: number, max: null, resolved: boolean}}
+ */
+export function resolve(constraints) {
+    let result = {
+        min: tomorrow,
+        max: null,
+        resolved: true,
+        blocked: []
+    };
+
+    // Find the lower bound
+    result = findLowerBound(constraints, result);
+    // Find the upper bound
+    result = findUpperBound(constraints, result);
+
     // Check if the bounds are valid and non-overlapping
-    if (
-        !!result.max                // Max is set
-        && result.max < result.min  // Max is less than the min
-    ) {
+    if (!validateBounds(result)) {
         // The bounds are overlapping and thus results are invalid
         result.min = null;
         result.max = null;
@@ -42,10 +84,7 @@ export function resolve(constraints) {
     }
     else {
         // The bounds are valid and non-overlapping. Continue to resolve.
-        // constraints.map((item, i) => {
-        //     console.log(item.type, new Date(item.value), i);
-        //
-        // });
+        result = blockDates(constraints, result);
     }
 
     return result;
