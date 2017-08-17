@@ -9,7 +9,7 @@ const CONSTRAINT = Constants.CONSTRAINT;
  * @param {Array} constraints 
  * @param {Object} result 
  */
-function findLowerBound(constraints, result) {
+export function findLowerBound(constraints, result) {
     const greaterThans = constraints.filter(item => item.type === CONSTRAINT.GREATER_THAN);
     if (greaterThans.length > 0) {
         // Get the largest value for the upper bound
@@ -24,7 +24,7 @@ function findLowerBound(constraints, result) {
  * @param {Array} constraints 
  * @param {Object} result 
  */
-function findUpperBound(constraints, result) {
+export function findUpperBound(constraints, result) {
     const lessThans = constraints.filter(item => item.type === CONSTRAINT.LESS_THAN);
     if (lessThans.length > 0) {
         // Get the smallest value for the upper bound
@@ -35,9 +35,9 @@ function findUpperBound(constraints, result) {
 }
 
 /**
- * Return true of the bounds set are valid
+ * Return true if the bounds set are valid
  */
-function validateBounds(result) {
+export function validateBounds(result) {
     return !result.max                  // Max is not set
         || result.max > result.min;     // Max is greater than the min
 }
@@ -47,7 +47,7 @@ function validateBounds(result) {
  * @param {Array} constraints 
  * @param {Object} result 
  */
-function blockDates(constraints, result) {
+export function blockDates(constraints, result) {
     const blocked = constraints.filter(item => item.type === CONSTRAINT.NOT_EQUAL);
     if (blocked.length > 0) {
         // Set all the blocked dates
