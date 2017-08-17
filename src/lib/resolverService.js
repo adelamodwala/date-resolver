@@ -72,6 +72,14 @@ export function filterBlockedDatesByBounds(result) {
     return result;
 }
 
+export function findNeverEqualDays(constraints, result) {
+    constraints
+        .filter(item => item.type === CONSTRAINT.NEVER_EQUAL)
+        .map(item => result.neverEqual.add(item.value));
+
+    return result;
+}
+
 /**
  * Perform a resolution of the given set of constraints
  * @param constraints
@@ -82,7 +90,8 @@ export function resolve(constraints) {
         min: tomorrow,
         max: null,
         resolved: true,
-        blocked: []
+        blocked: [],
+        neverEqual: new Set()
     };
 
     // Find the lower bound
@@ -101,6 +110,7 @@ export function resolve(constraints) {
         // The bounds are valid and non-overlapping. Continue to resolve.
         result = blockDates(constraints, result);
         result = filterBlockedDatesByBounds(result);
+        result = findNeverEqualDays(constraints, result);
     }
 
     return result;

@@ -154,6 +154,47 @@ describe('resolverService tests', () => {
         });
     });
 
+    // --- resolverService.findNeverEqualDays
+    it('findNeverEqualDays when empty never equal days then do not set never equals', () => {
+        expect(resolverService.findNeverEqualDays([], {}))
+            .toEqual({});
+    });
+
+    it('findNeverEqualDays when never equal day given then add never equals', () => {
+        expect(resolverService.findNeverEqualDays([{
+            type: Constants.CONSTRAINT.NEVER_EQUAL,
+            value: Constants.WEEKDAY.THURSDAY
+        }], {
+            neverEqual: new Set()
+        }))
+            .toEqual({
+                neverEqual: new Set([Constants.WEEKDAY.THURSDAY])
+            });
+    });
+
+    it('findNeverEqualDays when never equal days given then add never equals', () => {
+        expect(resolverService.findNeverEqualDays([{
+            type: Constants.CONSTRAINT.NEVER_EQUAL,
+            value: Constants.WEEKDAY.THURSDAY
+        }, {
+            type: Constants.CONSTRAINT.NEVER_EQUAL,
+            value: Constants.WEEKDAY.FRIDAY
+        }, {
+            type: Constants.CONSTRAINT.NEVER_EQUAL,
+            value: Constants.WEEKDAY.SUNDAY
+        }], {
+            neverEqual: new Set([Constants.WEEKDAY.TUESDAY, Constants.WEEKDAY.SUNDAY])
+        }))
+            .toEqual({
+                neverEqual: new Set([
+                    Constants.WEEKDAY.TUESDAY,
+                    Constants.WEEKDAY.SUNDAY,
+                    Constants.WEEKDAY.THURSDAY,
+                    Constants.WEEKDAY.FRIDAY
+                ])
+            });
+    });
+
     // --- resolverService.resolve
     it('resolve when no minimum or maximum bounds given', () => {
         let result = resolverService.resolve([]);
@@ -161,7 +202,8 @@ describe('resolverService tests', () => {
             blocked: [],
             min: tomorrow.getTime(),
             max: null,
-            resolved: true
+            resolved: true,
+            neverEqual: new Set()
         });
     });
 
@@ -180,7 +222,8 @@ describe('resolverService tests', () => {
             blocked: [],
             min: tomorrow.getTime(),
             max: beforeTime,
-            resolved: true
+            resolved: true,
+            neverEqual: new Set()
         });
     });
 
@@ -203,7 +246,8 @@ describe('resolverService tests', () => {
             blocked: [],
             min: tomorrow.getTime(),
             max: beforeTime2,
-            resolved: true
+            resolved: true,
+            neverEqual: new Set()
         });
     });
 
@@ -222,7 +266,8 @@ describe('resolverService tests', () => {
             blocked: [],
             min: afterTime,
             max: null,
-            resolved: true
+            resolved: true,
+            neverEqual: new Set()
         });
     });
 
@@ -245,7 +290,8 @@ describe('resolverService tests', () => {
             blocked: [],
             min: afterTime1,
             max: null,
-            resolved: true
+            resolved: true,
+            neverEqual: new Set()
         });
     });
 
@@ -281,7 +327,8 @@ describe('resolverService tests', () => {
             blocked: [],
             min: afterTime2,
             max: beforeTime1,
-            resolved: true
+            resolved: true,
+            neverEqual: new Set()
         });
     });
 
@@ -304,7 +351,8 @@ describe('resolverService tests', () => {
             blocked: [],
             min: null,
             max: null,
-            resolved: false
+            resolved: false,
+            neverEqual: new Set()
         });
     });
 
@@ -329,7 +377,8 @@ describe('resolverService tests', () => {
             blocked: [],
             min: 1501905600000,
             max: 1502732800000,
-            resolved: true
+            resolved: true,
+            neverEqual: new Set()
         });
     });
 
@@ -356,7 +405,8 @@ describe('resolverService tests', () => {
             blocked: [1501732800500],
             min: 1501732800000,
             max: 1502732800000,
-            resolved: true
+            resolved: true,
+            neverEqual: new Set()
         });
     });
 

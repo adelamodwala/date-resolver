@@ -2,6 +2,17 @@ import React, {Component, PropTypes} from 'react';
 import Calendar from 'material-ui/DatePicker/Calendar';
 
 import * as dateUtils from '../../lib/dateUtils';
+import {WEEKDAY} from '../../lib/constants';
+
+const WEEKDAY_MAP = [
+    WEEKDAY.SUNDAY,
+    WEEKDAY.MONDAY,
+    WEEKDAY.TUESDAY,
+    WEEKDAY.WEDNESDAY,
+    WEEKDAY.THURSDAY,
+    WEEKDAY.FRIDAY,
+    WEEKDAY.SATURDAY
+];
 
 class ResultCalendar extends Component {
 
@@ -26,7 +37,10 @@ class ResultCalendar extends Component {
 
     disableDate(date) {
         let dateTime = dateUtils.getBeginningOfDay(date).getTime();
-        return this.props.resultSet.blocked.indexOf(dateTime) > -1;
+        let {neverEqual} = this.props.resultSet;
+
+        return this.props.resultSet.blocked.indexOf(dateTime) > -1
+            || neverEqual.has(WEEKDAY_MAP[date.getDay()]);
     }
 
     render () {
@@ -48,7 +62,8 @@ ResultCalendar.propTypes = {
         resolved: PropTypes.bool,
         min: PropTypes.number,
         max: PropTypes.number,
-        blocked: PropTypes.arrayOf(PropTypes.number)
+        blocked: PropTypes.arrayOf(PropTypes.number),
+        neverEqual: PropTypes.object
     })
 };
 

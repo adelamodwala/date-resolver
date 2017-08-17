@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import * as validators from '../../lib/validators';
 import * as convert from '../../lib/convert';
 import ResultCalendar from "./ResultCalendar";
+import * as Constants from '../../lib/constants';
 
 class Results extends Component {
 
@@ -44,10 +45,23 @@ class Results extends Component {
         return messages;
     }
 
+    getNeverEqualDaysMessages() {
+        const {neverEqual} = this.props.resultSet;
+        let messages = [];
+        if (neverEqual.size > 0) {
+            neverEqual.forEach(day => {
+                messages.push(`Never on a ${Constants.WEEKDAY_LABEL[day]}`);
+            })
+        }
+
+        return messages;
+    }
+
     getConstraintMessages() {
         let messages = [
             ...this.getBoundsMessage(),
-            ...this.getBlockedDatesMessages()
+            ...this.getBlockedDatesMessages(),
+            ...this.getNeverEqualDaysMessages()
         ];
         let renderMessages = messages.map((message, idx) => <li key={idx}>{message}</li>);
 
@@ -86,7 +100,8 @@ Results.propTypes = {
         resolved: PropTypes.bool,
         min: PropTypes.number,
         max: PropTypes.number,
-        blocked: PropTypes.arrayOf(PropTypes.number)
+        blocked: PropTypes.arrayOf(PropTypes.number),
+        neverEqual: PropTypes.object
     })
 };
 
