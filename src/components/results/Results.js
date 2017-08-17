@@ -1,13 +1,14 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 
 import * as validators from '../../lib/validators';
 import * as convert from '../../lib/convert';
+import ResultCalendar from "./ResultCalendar";
 
 class Results extends Component {
 
     getBoundsMessage() {
-        const { resultSet } = this.props;
+        const {resultSet} = this.props;
         let message = '';
         if (!!resultSet.min && !!resultSet.max) {
             // Both min and max are defined
@@ -32,9 +33,9 @@ class Results extends Component {
     }
 
     getBlockedDatesMessages() {
-        const { resultSet } = this.props;
+        const {resultSet} = this.props;
         let messages = [];
-        if(validators.arrayIsNotEmpty(resultSet.blocked)) {
+        if (validators.arrayIsNotEmpty(resultSet.blocked)) {
             resultSet.blocked.map(dateTime => {
                 messages.push(`Not ${convert.formatToReadableDateString(dateTime)}`);
             })
@@ -54,7 +55,7 @@ class Results extends Component {
     }
 
     render() {
-        const { resultSet } = this.props;
+        const {resultSet} = this.props;
         if (validators.objectIsEmpty(resultSet)) {
             return null;
         }
@@ -65,15 +66,21 @@ class Results extends Component {
         let message = "You can pick a date that is:";
         return (
             <div>
-                {message}
-                <ul>
-                    {this.getConstraintMessages()}
-                </ul>
+                <div>
+                    <ResultCalendar resultSet={this.props.resultSet}/>
+                </div>
+                <div>
+                    {message}
+                    <ul>
+                        {this.getConstraintMessages()}
+                    </ul>
+                </div>
             </div>
         );
     }
 
 }
+
 Results.propTypes = {
     resultSet: PropTypes.shape({
         resolved: PropTypes.bool,
@@ -84,7 +91,7 @@ Results.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { resultSet } = state.constraints;
+    const {resultSet} = state.constraints;
     return {
         resultSet
     }

@@ -13,7 +13,7 @@ class ConstraintsView extends Component {
 
     render () {
         return (
-            <div>
+            <div style={{height: 200, overflowY: 'auto'}}>
                 {this.props.constraints.map((constraint, idx) => <ConstraintView key={idx}
                                                                                  constraint={constraint}/>)}
             </div>
