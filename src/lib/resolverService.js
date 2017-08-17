@@ -58,6 +58,21 @@ export function blockDates(constraints, result) {
 }
 
 /**
+ * Filter blocked dates by given bounds
+ * @param {Object} result
+ */
+export function filterBlockedDatesByBounds(result) {
+    if(!!result.min && result.min > 0) {
+        result.blocked = result.blocked.filter(x => x >= result.min);
+    }
+    if(!!result.max && result.max > 0) {
+        result.blocked = result.blocked.filter(x => x <= result.max);
+    }
+
+    return result;
+}
+
+/**
  * Perform a resolution of the given set of constraints
  * @param constraints
  * @returns {{min: number, max: null, resolved: boolean}}
@@ -85,6 +100,7 @@ export function resolve(constraints) {
     else {
         // The bounds are valid and non-overlapping. Continue to resolve.
         result = blockDates(constraints, result);
+        result = filterBlockedDatesByBounds(result);
     }
 
     return result;

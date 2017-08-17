@@ -133,6 +133,27 @@ describe('resolverService tests', () => {
             });
     });
 
+    // --- resolverService.filterBlockedDatesByBounds
+    it('filterBlockedDatesByBounds when lower bound set then filter out dates less than lower bound', () => {
+        expect(resolverService.filterBlockedDatesByBounds({
+            min: 10,
+            blocked: [3, 11, 7, 22]
+        })).toEqual({
+            min: 10,
+            blocked: [11, 22]
+        });
+    });
+
+    it('filterBlockedDatesByBounds when upper bound set then filter out dates greater than upper bound', () => {
+        expect(resolverService.filterBlockedDatesByBounds({
+            max: 20,
+            blocked: [3, 11, 7, 22]
+        })).toEqual({
+            max: 20,
+            blocked: [3, 11, 7]
+        });
+    });
+
     // --- resolverService.resolve
     it('resolve when no minimum or maximum bounds given', () => {
         let result = resolverService.resolve([]);
@@ -321,12 +342,18 @@ describe('resolverService tests', () => {
             "value": 1502732800000
         }, {
             "type": Constants.CONSTRAINT.NOT_EQUAL,
-            "value": 1234
+            "value": 1501732700000  // before greater than
+        }, {
+            "type": Constants.CONSTRAINT.NOT_EQUAL,
+            "value": 1502732900000  // after less than
+        }, {
+            "type": Constants.CONSTRAINT.NOT_EQUAL,
+            "value": 1501732800500  // between bounds
         }];
 
         let result = resolverService.resolve(constraints);
         expect(result).toEqual({
-            blocked: [1234],
+            blocked: [1501732800500],
             min: 1501732800000,
             max: 1502732800000,
             resolved: true
