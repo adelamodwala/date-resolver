@@ -19,6 +19,11 @@ export default function constraintsReducer(state = initialState, action) {
                 resultSet
             };
 
+        case constraintsActionTypes.RESET:
+            return {
+                ...initialState
+            }
+
         default:
             return state;
     }

@@ -66,6 +66,9 @@ class ConstraintInput extends Component {
                             }, {
                                 label: Constants.CONSTRAINT_LABEL.LESS_THAN,
                                 type: Constants.CONSTRAINT.LESS_THAN
+                            }, {
+                                label: Constants.CONSTRAINT_LABEL.NOT_EQUAL,
+                                type: Constants.CONSTRAINT.NOT_EQUAL
                             }]}/>
                 <DatePicker value={this.state.date}
                             minDate={tomorrow}
