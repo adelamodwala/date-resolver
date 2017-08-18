@@ -1,0 +1,9 @@
+.ConstraintsForm {
+
+}
+
+.ConstraintsForm-container {
+    max-width: 500px;
+    width: 90%;
+    padding: 20px;
+}
