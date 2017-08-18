@@ -50,6 +50,7 @@ class ResultCalendar extends Component {
                           disabled={false}
                           minDate={this.state.minDate}
                           maxDate={this.state.maxDate}
+                          initialDate={this.state.minDate}
                           shouldDisableDate={this.disableDate.bind(this)}
                           firstDayOfWeek={1}/>
                 <div style={{clear: 'both'}}></div>

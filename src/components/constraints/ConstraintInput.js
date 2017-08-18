@@ -21,8 +21,18 @@ class ConstraintInput extends Component {
             date: tomorrow,
             constraint: Constants.CONSTRAINT.GREATER_THAN,
             disableAdd: false,
-            neverEqual: Constants.WEEKDAY.MONDAY
+            neverEqual: Constants.WEEKDAY.MONDAY,
+            minDate: tomorrow,
+            maxDate: null,
         }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let {min, max} = nextProps.resultSet;
+        this.setState({
+            minDate: !!min ? new Date(min) : null,
+            maxDate: !!max ? new Date(max) : null
+        });
     }
 
     onConstraintSelect(option) {
@@ -109,8 +119,7 @@ class ConstraintInput extends Component {
                                     label: Constants.WEEKDAY_LABEL.SUNDAY,
                                     type: Constants.WEEKDAY.SUNDAY
                                 },]}/> :
-                    <DatePicker value={this.state.date}
-                                minDate={tomorrow}
+                    <DatePicker value={this.state.date === null ? this.state.minDate : this.state.date}
                                 onDateSelect={date => this.onDateSelect(date)}/>
                 }
                 <ToolButton label="ADD"
@@ -121,7 +130,19 @@ class ConstraintInput extends Component {
     }
 }
 
-ConstraintInput.propTypes = {};
+ConstraintInput.propTypes = {
+    resultSet: PropTypes.shape({
+        min: PropTypes.number,
+        max: PropTypes.number
+    })
+};
+
+function mapStateToProps(state) {
+    const {resultSet} = state.constraints;
+    return {
+        resultSet
+    }
+}
 
 function mapDispatchToProps(dispatch) {
     let {addConstraint} = constraintActions;
@@ -132,4 +153,4 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ConstraintInput);
+export default connect(mapStateToProps, mapDispatchToProps)(ConstraintInput);
