@@ -120,6 +120,7 @@ class ConstraintInput extends Component {
                                     type: Constants.WEEKDAY.SUNDAY
                                 },]}/> :
                     <DatePicker value={this.state.date === null ? this.state.minDate : this.state.date}
+                                minDate={this.state.minDate}
                                 onDateSelect={date => this.onDateSelect(date)}/>
                 }
                 <ToolButton label="ADD"
